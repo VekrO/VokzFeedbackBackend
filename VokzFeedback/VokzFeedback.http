@@ -1,0 +1,6 @@
+@VokzFeedback_HostAddress = http://localhost:5228
+
+GET {{VokzFeedback_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

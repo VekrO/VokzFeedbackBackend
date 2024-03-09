@@ -73,7 +73,9 @@ namespace VokzFeedback.Controllers
 
                 var token = _tokenService.GenerateToken(usuarioDb);
 
-                return Ok(token);
+                return Ok( new {
+                    token
+                });
 
 
             } catch (Exception ex)

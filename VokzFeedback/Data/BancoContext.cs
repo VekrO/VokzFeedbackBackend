@@ -8,6 +8,7 @@ namespace VokzFeedback.Data
         public BancoContext(DbContextOptions<BancoContext> options) : base(options) { }
 
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
     }
 }

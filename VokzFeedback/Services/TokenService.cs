@@ -30,6 +30,7 @@ namespace VokzFeedback.Services
 
             var tokenOptions = new JwtSecurityToken(issuer, audience, claims: new[]
             {
+                new Claim(type: "Id", usuario.Id.ToString()),
                 new Claim(type: ClaimTypes.Name, usuario.Name),
                 new Claim(type: ClaimTypes.Email, usuario.Email),
             }, expires: expiresIn, signingCredentials: credentials);

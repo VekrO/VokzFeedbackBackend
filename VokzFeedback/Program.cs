@@ -16,6 +16,14 @@ builder.Services.AddDbContext<BancoContext>((o) => o.UseSqlServer(builder.Config
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "VokzFeedback", policy => {
+        policy.WithOrigins("http://localhost:4200").AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
 builder.Services.AddSwaggerGen(o =>
 {
     o.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
@@ -52,8 +60,7 @@ builder.Services.AddSwaggerGen(o =>
 
 });
 
-builder.Services.AddAuthentication((x) =>
-{
+builder.Services.AddAuthentication((x) => {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(o =>
@@ -71,9 +78,12 @@ builder.Services.AddAuthentication((x) =>
 });
 
 builder.Services.AddScoped<Usuario>(); 
+builder.Services.AddScoped<Feedback>();
 builder.Services.AddScoped<TokenService>();
 
 var app = builder.Build();
+
+app.UseCors("VokzFeedback");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

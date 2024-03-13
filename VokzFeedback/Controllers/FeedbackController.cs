@@ -47,10 +47,13 @@ namespace VokzFeedback.Controllers
         public async Task<ActionResult<Feedback[]>> GetByUsuarioAndStatus(Guid idUsuario, string status)
         {
             try {
-            
-                List<Feedback> feedbacks = await _context.Feedbacks.Where(x => x.User.Id == idUsuario && x.Status == status).ToListAsync();
+                    
+                if(status == "Todos")
+                {
+                    return Ok(await _context.Feedbacks.Where(x => x.User.Id == idUsuario).ToListAsync());
+                }
 
-                return Ok(feedbacks);
+                return Ok(await _context.Feedbacks.Where(x => x.User.Id == idUsuario && x.Status == status).ToListAsync());
 
             } catch (Exception ex)
             {

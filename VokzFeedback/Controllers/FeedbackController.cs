@@ -47,13 +47,19 @@ namespace VokzFeedback.Controllers
         public async Task<ActionResult<Feedback[]>> GetByUsuarioAndStatus(Guid idUsuario, string status)
         {
             try {
-                    
-                if(status == "Todos")
+
+                IQueryable<Feedback> query = _context.Feedbacks.Where(x => x.User.Id == idUsuario);
+
+
+                if (status != "Todos")
                 {
-                    return Ok(await _context.Feedbacks.Where(x => x.User.Id == idUsuario).ToListAsync());
+                    query = query.Where(x => x.Status == status);
                 }
 
-                return Ok(await _context.Feedbacks.Where(x => x.User.Id == idUsuario && x.Status == status).ToListAsync());
+
+                List<Feedback> feedbacks = await query.OrderByDescending(x => x.DateHour).ToListAsync();
+
+                return Ok(feedbacks);
 
             } catch (Exception ex)
             {
@@ -80,7 +86,8 @@ namespace VokzFeedback.Controllers
                     Sender = model.Sender,
                     UserId = usuario.Id,
                     User = usuario,
-                    Status = model.Status
+                    Status = model.Status,
+                    DateHour = model.DateHour,
                 };
 
                 await _context.Feedbacks.AddAsync(feedback);
